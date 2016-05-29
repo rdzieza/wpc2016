@@ -16,7 +16,6 @@ post '/upload' do
 end
 
 get '/list' do
-	# @files = Dir.entries("files").select {|f| !File.directory? f}
 	@files = Dir.glob("files/*.{jpg,gif}")
 	haml :list
 end
@@ -29,13 +28,18 @@ post '/save' do
 	pdf = Prawn::Document.new
 
 	params[:files].each do |f|
-		title = "files/" + f.to_s
+		title = f.to_s
 		pdf.image title, :at => [50, 250], :width => 300, :height => 350
 		pdf.start_new_page
 	end
 
+	if params[:file_name].include? ".pdf"
+		name = params[:file_name]
+	else
+		name = params[:file_name] + ".pdf"
+	end
 
-	pdf.render_file "files/outcome.pdf"
+	pdf.render_file "files/" + name
 
 	result
 end

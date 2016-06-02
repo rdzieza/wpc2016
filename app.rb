@@ -49,9 +49,6 @@ post '/save' do
 end
 
 def upload(file)
-  Aws.config.update(
-      {:access_key_id => 'AKIAJDGCBMVHU52PHCJA',
-       :secret_access_key => '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'})
   s3 = Aws::S3::Resource.new(region: 'eu-central-1')
   bucket = '166543-robson'
   name = File.basename file

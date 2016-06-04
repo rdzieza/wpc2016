@@ -19,6 +19,7 @@ end
 
 get '/list' do
   @files = get_bucket.objects.collect(&:key)
+  puts @files
   haml :list
 end
 

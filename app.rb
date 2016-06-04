@@ -25,17 +25,14 @@ get '/list' do
   haml :list
 end
 
-get '/mail' do
-  Pony.mail(:to => 'tomasz.a.sowa@gmail.com', :from => 'me@example.com', :subject => 'hi', :body => 'Hello there.')
-end
-
 post '/save' do
   result = ""
   params[:files].each {|f| result += f.to_s}
+  email = params[:email]
 
   pdf = Prawn::Document.new
-
   params[:files].each do |f|
+    puts get_bucket.objects[f]
     title = f.to_s
     pdf.image title, :at => [50, 250], :width => 300, :height => 350
     pdf.start_new_page
@@ -48,8 +45,13 @@ post '/save' do
   end
 
   pdf.render_file "files/" + name
-
-  upload("files/" + name)
+  
+  Pony.mail(
+    :to => email, 
+    :from => 'fake@wpc2016.uek.krakow.pl', 
+    :subject => 'Your album: #{name}', 
+    :body => 'Check attachments.',
+    :attachments => {"#{name}" => File.read(pdf) })
 
   result
 end

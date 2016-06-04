@@ -21,7 +21,6 @@ end
 
 get '/list' do
   @files = get_bucket.objects.collect(&:key)
-  puts @files
   haml :list
 end
 
@@ -32,7 +31,7 @@ post '/save' do
 
   pdf = Prawn::Document.new
   params[:files].each do |f|
-    puts get_bucket.objects[f]
+    puts f
     title = f.to_s
     pdf.image title, :at => [50, 250], :width => 300, :height => 350
     pdf.start_new_page

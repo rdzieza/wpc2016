@@ -17,6 +17,9 @@
 			%label{:for => "name"} Album name:
 			%input.form-control{:type => "text", :name => "file_name"}
 			%br
+			%label{:for => "email"} Email adress:
+			%input.form-control{:type => "text", :name => "email"}
+			%br
 			%label{:for => "files[]"} Select photos:
 			%select.form-control{ :multiple => "true", :name => "files[]"}
 				- @files.each do |file|

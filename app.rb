@@ -9,11 +9,10 @@ end
 
 post '/upload' do
   puts "/upload"
-  filename = params[:file][:filename]
   tempfile = params[:file][:tempfile]
-  target = "files/#{filename}"
-  puts target
-  File.open(target, 'wb') {|f| f.write tempfile.read }
+  puts tempfile.path
+  
+  upload(tempfile.path)
   redirect "/list"
 end
 

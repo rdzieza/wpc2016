@@ -18,12 +18,7 @@ post '/upload' do
 end
 
 get '/list' do
-  s3 = Aws::S3::Resource.new(region: 'eu-central-1')
-  bucket = '166543-robson'
-
-  puts s3.bucket(bucket).objects.collect(&:key)
-  
-  @files = Dir.glob("files/*.{jpg,gif}")
+  @files = get_bucket.objects.collect(&:key)
   haml :list
 end
 
@@ -53,11 +48,12 @@ post '/save' do
   result
 end
 
-def upload(file, filename)
-  s3 = Aws::S3::Resource.new(region: 'eu-central-1')
-  bucket = '166543-robson'
+def get_bucket
+  Aws::S3::Resource.new(region: 'eu-central-1').bucket('166543-robson')
+end
 
-  obj = s3.bucket(bucket).object(filename)
+def upload(file, filename)
+  obj = get_bucket.object(filename)
 
   if obj.upload_file(file)
     puts "Uploaded #{file} to bucket #{bucket}"

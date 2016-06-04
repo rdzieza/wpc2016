@@ -32,6 +32,7 @@ post '/save' do
   pdf = Prawn::Document.new
   params[:files].each do |f|
     puts get_bucket.object(f).etag
+    img = get_bucket.object(f).etag
     pdf.image img, :at => [50, 250], :width => 300, :height => 350
     pdf.start_new_page
   end

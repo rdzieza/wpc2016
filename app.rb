@@ -2,6 +2,8 @@ require 'sinatra'
 require 'haml'
 require 'prawn'
 require 'aws-sdk'
+require 'pony'
+require 'sendmail'
 
 get '/' do
   haml :home
@@ -23,10 +25,13 @@ get '/list' do
   haml :list
 end
 
+get '/mail' do
+  Pony.mail(:to => 'tomasz.a.sowa@gmail.com', :from => 'me@example.com', :subject => 'hi', :body => 'Hello there.')
+end
+
 post '/save' do
   result = ""
   params[:files].each {|f| result += f.to_s}
-
 
   pdf = Prawn::Document.new
 

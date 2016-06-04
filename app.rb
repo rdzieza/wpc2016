@@ -12,7 +12,6 @@ post '/upload' do
   tempfile = params[:file][:tempfile]
   puts tempfile.path
   
-  upload(tempfile.path)
   redirect "/list"
 end
 
@@ -47,12 +46,9 @@ post '/save' do
   result
 end
 
-def upload(file)
   s3 = Aws::S3::Resource.new(region: 'eu-central-1')
   bucket = '166543-robson'
-  name = File.basename file
 
-  obj = s3.bucket(bucket).object(name)
 
   if obj.upload_file(file)
     puts "Uploaded #{file} to bucket #{bucket}"

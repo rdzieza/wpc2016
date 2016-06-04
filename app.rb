@@ -18,6 +18,11 @@ post '/upload' do
 end
 
 get '/list' do
+  s3 = Aws::S3::Resource.new(region: 'eu-central-1')
+  bucket = '166543-robson'
+
+  puts s3.bucket(bucket).objects.collect(&:key)
+  
   @files = Dir.glob("files/*.{jpg,gif}")
   haml :list
 end

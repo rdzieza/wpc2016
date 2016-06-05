@@ -2,8 +2,7 @@ require 'sinatra'
 require 'haml'
 require 'prawn'
 require 'aws-sdk'
-require 'pony'
-require 'sendmail'
+require 'json'
 
 get '/' do
   haml :home
@@ -19,29 +18,6 @@ post '/upload' do
   redirect "/list"
 end
 
-get '/sqs' do
-  sqs = Aws::SQS::Client.new(region: 'eu-central-1')
-  resp = sqs.create_queue({queue_name: "tsowa-queue_name"})
-  puts resp.to_h
-  puts resp.queue_url
-  
-  re1 = sqs.send_message({
-  queue_url: resp.queue_url, # required
-  message_body: "String", # required
-  delay_seconds: 1
-  })
-  puts re1.to_h
-  
-  re2 = sqs.receive_message({
-  queue_url: resp.queue_url,
-  message_attribute_names: ["MessageAttributeName"],
-  max_number_of_messages: 1,
-  visibility_timeout: 1,
-  wait_time_seconds: 1,
-  })
-  puts re2.to_h
-end
-
 get '/list' do
   @files = get_bucket.objects.collect(&:key)
   haml :list
@@ -50,6 +26,7 @@ end
 post '/save' do
   result = ""
   email = params[:email]
+  files = params[:files]  
   
   if params[:file_name].include? ".pdf"
     name = params[:file_name]
@@ -57,42 +34,18 @@ post '/save' do
     name = params[:file_name] + ".pdf"
   end
   
-  FileUtils.mkdir_p 'files' # temporary directory
+  album = {:album_name => name, :email => email, :files => files}
+  album_json = JSON.generate(album)
+  puts album_json
   
-  s3_client = Aws::S3::Client.new(region: 'eu-central-1')
-  params[:files].each do |filename|
-    # save every choosed files to files/ directory
-    s3_client.get_object(
-      bucket: '166543-robson', 
-      key: filename, 
-      response_target: "files/" + filename)
-  end
-
-  pdf = Prawn::Document.new
-  params[:files].each do |f|
-    title = "files/" + f # path to file
-    pdf.image title, :at => [50, 250], :width => 300, :height => 350
-    pdf.start_new_page
-  end
-
-  pdf.render_file "files/" + name # save pdf to file
+  sqs = Aws::SQS::Client.new(region: 'eu-central-1')
+  queue = sqs.create_queue({queue_name: "tsowa-queue_name"})
+  re1 = sqs.send_message({
+    queue_url: queue.queue_url,
+    message_body: album_json,
+    delay_seconds: 1
+  })
   
-  # send mail
-  mail_subject = "Your album: #{name}"
-  Pony.mail(
-    :to => email, 
-    :from => 'fake@wpc2016.uek.krakow.pl', 
-    :subject => mail_subject, 
-    :body => 'Check attachments.',
-    :attachments => {"#{name}" => File.read("files/" + name) })
-    
-  # delete files from bucket, remove temporary dir
-  FileUtils.remove_dir "files";
-  params[:files].each do |f|
-    obj = get_bucket.object(f)
-    obj.delete
-  end
-
   result
 end
 

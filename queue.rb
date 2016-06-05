@@ -18,7 +18,7 @@ while true
     wait_time_seconds: 1,
   })
   
-  #if resp.messages.nil?
+  if resp.messages[0].body.nil?
     puts "mail will be send from: " + resp.messages[0].body
     msg = JSON.parse(resp.body)
     album_name = msg["album_name"]

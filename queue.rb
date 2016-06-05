@@ -21,7 +21,7 @@ while true
   })
   
   if elo
-    puts resp.to_h
+    puts resp.messages[0]
     elo = false
     puts "mail will be send from: " + resp.messages[0].body
     msg = JSON.parse(resp.body)

@@ -5,11 +5,12 @@ require 'sendmail'
 require 'prawn'
 require 'json'
 
-def send_mail_from_queue
-  s3_client = Aws::S3::Client.new(region: 'eu-central-1')  
+while true
+  s3_client = Aws::S3::Client.new(region: 'eu-central-1') 
+  sqs = Aws::SQS::Client.new(region: 'eu-central-1') 
   queue = sqs.create_queue({queue_name: "tsowa-queue_name"})  
   
-  resp = s3_client.receive_message({
+  resp = sqs.receive_message({
     queue_url: queue.queue_url,
     message_attribute_names: ["MessageAttributeName"],
     max_number_of_messages: 1,
@@ -21,11 +22,7 @@ def send_mail_from_queue
   album_name = msg["album_name"]
   email = msg["email"]
   files = msg["files"]
-  puts album_name
-  puts email
-  puts files
   if (album_name.nil? && email.nil? && files.nil?)
-  
     FileUtils.mkdir_p 'files' # temporary directory
     files.each do |filename|
       # save every choosed files to files/ directory
@@ -58,6 +55,12 @@ def send_mail_from_queue
       obj = get_bucket.object(f)
       obj.delete
     end
+    
+    resp = client.delete_message({
+      queue_url: queue.queue_url, # required
+      receipt_handle: "String", # required
+    })
+    puts resp.to_h
   end
 end
 

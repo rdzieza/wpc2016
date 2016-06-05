@@ -71,8 +71,8 @@ def upload(file, filename)
   obj = get_bucket.object(filename.downcase)
 
   if obj.upload_file(file)
-    puts "Uploaded #{file} to bucket #{bucket}"
+    puts "Uploaded #{file}}"
   else
-    puts "Could not upload #{file} to bucket #{bucket}!"
+    puts "Could not upload #{file}!"
   end
 end

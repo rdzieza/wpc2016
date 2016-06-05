@@ -25,7 +25,7 @@ get '/sqs' do
   puts resp.to_h
   puts resp.queue_url
   
-  re = client.receive_message({
+  re = sqs.receive_message({
   queue_url: resp.queue_url,
   message_attribute_names: ["MessageAttributeName"],
   max_number_of_messages: 1,

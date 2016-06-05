@@ -20,7 +20,7 @@ post '/upload' do
 end
 
 get '/list' do
-  @files = get_bucket.objects.collect(&:key)
+  @files = get_bucket.objects(prefix: '*.jpg').collect(&:key)
   haml :list
 end
 
@@ -48,7 +48,7 @@ post '/save' do
   pdf = Prawn::Document.new
   params[:files].each do |f|
     title = "files/" + f
-    pdf.image title, :at => [250, 250], :width => 300, :height => 350
+    pdf.image title, :at => [50, 250], :width => 300, :height => 350
     pdf.start_new_page
   end
 

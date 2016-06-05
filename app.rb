@@ -20,12 +20,19 @@ post '/upload' do
 end
 
 get '/sqs' do
-  sqs = Aws::SQS::Client.new(region: 'eu-central-1')
-  poller = Aws::SQS::QueuePoller.new('https://sqs.eu-central-1.amazonaws.com/881078108084/zajac-album', client: sqs)
-  poller.poll(wait_time_seconds:10) do |msg|
-    puts '----'
-    puts msg.body
+  sqs = AWS::SQS.new
+  queue = sqs.queues.create("my_queue")
+
+  send = lambda { |name, queue|
+  while true do
+    queue.send_message("#{name}:#{Time.now.to_s}")
+    sleep 1
   end
+  }
+
+  Thread.new { send.call("t1", queue) }
+  Thread.new { send.call("t2", queue) }
+  Thread.new { send.call("t3", queue) }
 end
 
 get '/list' do

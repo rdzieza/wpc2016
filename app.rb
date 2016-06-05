@@ -36,6 +36,7 @@ post '/save' do
   end
   
   Dir.mkdir("files") unless File.exists?("files")
+  s3_client = Aws::S3::Client.new
   params[:files].each do |filename|
     s3_client.get_object(
       bucket: '166543-robson', 

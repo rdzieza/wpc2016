@@ -66,7 +66,7 @@ post '/save' do
   # delete files from bucket, remove temporary dir
   FileUtils.remove_dir "files";
   params[:files].each do |f|
-    obj = bucket.object(f)
+    obj = get_bucket.object(f)
     obj.delete
   end
 

@@ -55,7 +55,7 @@ while true
       # delete files from bucket, remove temporary dir
       FileUtils.remove_dir "files";
       files.each do |f|
-        obj = get_bucket.object(f)
+        obj = Aws::S3::Resource.new(region: 'eu-central-1').bucket('166543-robson').object(f)
         obj.delete
       end
       
@@ -63,7 +63,6 @@ while true
         queue_url: queue.queue_url, # required
         receipt_handle: "String", # required
       })
-      puts resp.to_h
     end
   end
 end

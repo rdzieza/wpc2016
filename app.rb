@@ -34,7 +34,7 @@ post '/save' do
     name = params[:file_name] + ".pdf"
   end
   
-  puts param[:files]
+  puts params[:files]
   s3_client = Aws::S3::Client.new(region: 'eu-central-1')
   params[:files].each do |filename|
     puts filename

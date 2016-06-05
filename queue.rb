@@ -61,7 +61,7 @@ while true
       
       resp = sqs.delete_message({
         queue_url: queue.queue_url, # required
-        receipt_handle: "String", # required
+        receipt_handle: resp.messages[0].receipt_handle # required
       })
     end
   end

@@ -16,3 +16,8 @@ Running on Amazon EC2?
 ```
 rackup -p 5000 -o 0.0.0.0
 ```
+
+Running queue listener
+```
+ruby queue.rb &
+```

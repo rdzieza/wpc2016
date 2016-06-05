@@ -34,7 +34,6 @@ post '/save' do
     name = params[:file_name] + ".pdf"
   end
   
-  puts params[:files]
   s3_client = Aws::S3::Client.new(region: 'eu-central-1')
   params[:files].each do |filename|
     puts filename
@@ -47,18 +46,21 @@ post '/save' do
   pdf = Prawn::Document.new
   params[:files].each do |f|
     title = "files/" + f
-    pdf.image title, :at => [50, 250], :width => 300, :height => 350
+    pdf.image title, :at => [50, 50], :width => 300, :height => 350
     pdf.start_new_page
   end
 
   pdf.render_file "files/" + name
   
+  mail_subject = "Your album: #{name}"
   Pony.mail(
     :to => email, 
     :from => 'fake@wpc2016.uek.krakow.pl', 
-    :subject => 'Your album: #{name}', 
+    :subject => mail_subject, 
     :body => 'Check attachments.',
     :attachments => {"#{name}" => File.read("files/" + name) })
+    
+  FileUtils.remove_dir("files");
 
   result
 end

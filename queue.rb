@@ -19,6 +19,7 @@ while true
   })
   
   if resp.nil?
+    puts "mail will be send from: " + resp.body
     msg = JSON.parse(resp.body)
     album_name = msg["album_name"]
     email = msg["email"]

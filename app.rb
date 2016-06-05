@@ -45,6 +45,7 @@ post '/save' do
     message_body: album_json,
     delay_seconds: 1
   })
+  puts re1.to_h
   
   result
 end

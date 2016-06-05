@@ -18,7 +18,7 @@ while true
     wait_time_seconds: 1,
   })
   
-  if resp.messages[0].nil?
+  unless resp.messages[0].nil?
     puts resp.messages[0]
     msg = JSON.parse(resp.messages[0].body)
     album_name = msg["album_name"]
@@ -27,7 +27,7 @@ while true
     puts album_name
     puts email
     puts files
-    if (album_name.nil? && email.nil? && files.nil?)
+    unless album_name.nil? && email.nil? && files.nil?
       puts "make dir, save files"
       FileUtils.mkdir_p 'files' # temporary directory
       files.each do |filename|

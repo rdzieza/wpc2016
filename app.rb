@@ -40,7 +40,7 @@ post '/save' do
     s3_client.get_object(
       bucket: '166543-robson', 
       key: filename, 
-      response_target: "files/" + file)
+      response_target: "files/" + filename)
   end
 
   pdf = Prawn::Document.new

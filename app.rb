@@ -28,17 +28,8 @@ get '/sqs' do
   re1 = sqs.send_message({
   queue_url: resp.queue_url, # required
   message_body: "String", # required
-  delay_seconds: 1,
-  message_attributes: {
-    "String" => {
-      string_value: "String",
-      binary_value: "data",
-      string_list_values: ["String"],
-      binary_list_values: ["data"],
-      data_type: "String", # required
-    },
-  },
-})
+  delay_seconds: 1
+  })
   puts re1.to_h
   
   re2 = sqs.receive_message({

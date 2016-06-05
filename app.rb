@@ -20,19 +20,9 @@ post '/upload' do
 end
 
 get '/sqs' do
-  sqs = AWS::SQS.new
-  queue = sqs.queues.create("my_queue")
-
-  send = lambda { |name, queue|
-  while true do
-    queue.send_message("#{name}:#{Time.now.to_s}")
-    sleep 1
-  end
-  }
-
-  Thread.new { send.call("t1", queue) }
-  Thread.new { send.call("t2", queue) }
-  Thread.new { send.call("t3", queue) }
+  sqs = Aws::SQS::Client.new(region: 'eu-central-1')
+  resp = sqs.create_queue({queue_name: "tsowa-queue_name"})
+  puts resp.to_h
 end
 
 get '/list' do

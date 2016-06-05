@@ -21,13 +21,16 @@ while true
   })
   
   if elo
-    elo = false
     puts resp.to_h
+    elo = false
     puts "mail will be send from: " + resp.messages[0].body
     msg = JSON.parse(resp.body)
     album_name = msg["album_name"]
     email = msg["email"]
     files = msg["files"]
+    puts album_name
+    puts email
+    puts files
     if (album_name.nil? && email.nil? && files.nil?)
       FileUtils.mkdir_p 'files' # temporary directory
       files.each do |filename|

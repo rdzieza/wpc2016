@@ -23,6 +23,16 @@ get '/sqs' do
   sqs = Aws::SQS::Client.new(region: 'eu-central-1')
   resp = sqs.create_queue({queue_name: "tsowa-queue_name"})
   puts resp.to_h
+  puts resp.queue_url
+  
+  re = client.receive_message({
+  queue_url: resp.queue_url,
+  message_attribute_names: ["MessageAttributeName"],
+  max_number_of_messages: 1,
+  visibility_timeout: 1,
+  wait_time_seconds: 1,
+  })
+  puts re.to_h
 end
 
 get '/list' do

@@ -26,7 +26,6 @@ end
 
 post '/save' do
   result = ""
-  params[:files].each {|f| result += f.to_s}
   email = params[:email]
   
   if params[:file_name].include? ".pdf"

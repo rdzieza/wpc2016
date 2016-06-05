@@ -19,6 +19,14 @@ post '/upload' do
   redirect "/list"
 end
 
+get '/sqs' do
+  poller = Aws::SQS::QueuePoller.new("https://sqs.eu-central-1.amazonaws.com/881078108084/zajac-album")
+
+  poller.poll do |msg|
+    puts msg.body
+  end
+end
+
 get '/list' do
   @files = get_bucket.objects.collect(&:key)
   haml :list

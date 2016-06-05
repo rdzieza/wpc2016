@@ -35,7 +35,7 @@ post '/save' do
     name = params[:file_name] + ".pdf"
   end
   
-  Dir.mkdir("files") unless File.exists?(directory_name)
+  Dir.mkdir("files") unless File.exists?("files")
   params[:files].each do |filename|
     s3_client.get_object(
       bucket: '166543-robson', 

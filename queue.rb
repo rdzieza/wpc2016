@@ -24,7 +24,7 @@ while true
     puts resp.messages[0]
     elo = false
     puts "mail will be send from: " + resp.messages[0].body
-    msg = JSON.parse(resp.body)
+    msg = JSON.parse(resp.messages[0].body)
     album_name = msg["album_name"]
     email = msg["email"]
     files = msg["files"]

@@ -23,6 +23,6 @@
 			%label{:for => "files[]"} Select photos:
 			%select.form-control{ :multiple => "true", :name => "files[]"}
 				- @files.each do |file|
-					%option{:value => file.downcase} #{file}
+					%option{:value => file} #{file}
 			%br
 			%input.btn.btn-default{:type => "submit", "value" => "create"}

@@ -28,19 +28,26 @@ post '/save' do
   result = ""
   params[:files].each {|f| result += f.to_s}
   email = params[:email]
-
-  pdf = Prawn::Document.new
-  params[:files].each do |f|
-    puts get_bucket.object(f).etag
-    img = get_bucket.object(f).etag
-    pdf.image img, :at => [50, 250], :width => 300, :height => 350
-    pdf.start_new_page
-  end
-
+  
   if params[:file_name].include? ".pdf"
     name = params[:file_name]
   else
     name = params[:file_name] + ".pdf"
+  end
+  
+  Dir.mkdir("files") unless File.exists?(directory_name)
+  params[:files].each do |filename|
+    s3_client.get_object(
+      bucket: '166543-robson', 
+      key: filename, 
+      response_target: "files/" + file)
+  end
+
+  pdf = Prawn::Document.new
+  params[:files].each do |f|
+    title = directory_name + "/" + f
+    pdf.image title, :at => [50, 250], :width => 300, :height => 350
+    pdf.start_new_page
   end
 
   pdf.render_file "files/" + name
@@ -50,7 +57,7 @@ post '/save' do
     :from => 'fake@wpc2016.uek.krakow.pl', 
     :subject => 'Your album: #{name}', 
     :body => 'Check attachments.',
-    :attachments => {"#{name}" => File.read(pdf) })
+    :attachments => {"#{name}" => File.read("files/" + name) })
 
   result
 end

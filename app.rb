@@ -22,7 +22,7 @@ end
 get '/sqs' do
   sqs = Aws::SQS::Client.new(region: 'eu-central-1')
   poller = Aws::SQS::QueuePoller.new('https://sqs.eu-central-1.amazonaws.com/881078108084/zajac-album', client: sqs)
-  poller.poll do |msg|
+  poller.poll(wait_time_seconds:10) do |msg|
     puts '----'
     puts msg.body
   end

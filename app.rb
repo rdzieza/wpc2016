@@ -20,9 +20,9 @@ post '/upload' do
 end
 
 get '/sqs' do
-  poller = Aws::SQS::QueuePoller.new("https://sqs.eu-central-1.amazonaws.com/881078108084/zajac-album")
-
-  poller.poll do |msg|
+  sqs = AWS::SQS.new
+  queue = sqs.queues.create("new_queue")
+  queue.poll do |msg|
     puts msg.body
   end
 end

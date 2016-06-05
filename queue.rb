@@ -24,9 +24,6 @@ while true
     album_name = msg["album_name"]
     email = msg["email"]
     files = msg["files"]
-    puts album_name
-    puts email
-    puts files
     unless album_name.nil? && email.nil? && files.nil?
       puts "make dir, save files"
       FileUtils.mkdir_p 'files' # temporary directory
@@ -45,15 +42,15 @@ while true
         pdf.start_new_page
       end
 
-      pdf.render_file "files/" + name # save pdf to file
+      pdf.render_file "files/" + album_name # save pdf to file
       
       # send mail
       Pony.mail(
         :to => email, 
         :from => 'fake@wpc2016.uek.krakow.pl', 
-        :subject => "Your album: #{name}", 
+        :subject => "Your album: #{album_name}", 
         :body => 'Check attachments.',
-        :attachments => {"#{name}" => File.read("files/" + name) })
+        :attachments => {"#{album_name}" => File.read("files/" + album_name) })
           
       # delete files from bucket, remove temporary dir
       FileUtils.remove_dir "files";

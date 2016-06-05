@@ -25,7 +25,7 @@ get '/sqs' do
   puts resp.to_h
   puts resp.queue_url
   
-  resp = client.send_message({
+  re1 = sqs.send_message({
   queue_url: resp.queue_url, # required
   message_body: "String", # required
   delay_seconds: 1,
@@ -39,15 +39,16 @@ get '/sqs' do
     },
   },
 })
+  puts re1.to_h
   
-  re = sqs.receive_message({
+  re2 = sqs.receive_message({
   queue_url: resp.queue_url,
   message_attribute_names: ["MessageAttributeName"],
   max_number_of_messages: 1,
   visibility_timeout: 1,
   wait_time_seconds: 1,
   })
-  puts re.to_h
+  puts re2.to_h
 end
 
 get '/list' do

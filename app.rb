@@ -46,7 +46,7 @@ post '/save' do
 
   pdf = Prawn::Document.new
   params[:files].each do |f|
-    title = directory_name + "/" + f
+    title = "files/" + f
     pdf.image title, :at => [50, 250], :width => 300, :height => 350
     pdf.start_new_page
   end

@@ -5,8 +5,6 @@ require 'sendmail'
 require 'prawn'
 require 'json'
 
-elo = true
-
 while true
   s3_client = Aws::S3::Client.new(region: 'eu-central-1') 
   sqs = Aws::SQS::Client.new(region: 'eu-central-1') 
@@ -20,10 +18,8 @@ while true
     wait_time_seconds: 1,
   })
   
-  if elo
+  if resp.messages[0].nil?
     puts resp.messages[0]
-    elo = false
-    puts "mail will be send from: " + resp.messages[0].body
     msg = JSON.parse(resp.messages[0].body)
     album_name = msg["album_name"]
     email = msg["email"]
@@ -32,6 +28,7 @@ while true
     puts email
     puts files
     if (album_name.nil? && email.nil? && files.nil?)
+      puts "make dir, save files"
       FileUtils.mkdir_p 'files' # temporary directory
       files.each do |filename|
         # save every choosed files to files/ directory

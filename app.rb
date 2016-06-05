@@ -37,6 +37,7 @@ post '/save' do
   
   s3_client = Aws::S3::Client.new(region: 'eu-central-1')
   params[:files].each do |filename|
+    puts filename
     s3_client.get_object(
       bucket: '166543-robson', 
       key: filename, 

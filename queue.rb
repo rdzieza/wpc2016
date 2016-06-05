@@ -59,7 +59,7 @@ while true
         obj.delete
       end
       
-      resp = client.delete_message({
+      resp = sqs.delete_message({
         queue_url: queue.queue_url, # required
         receipt_handle: "String", # required
       })

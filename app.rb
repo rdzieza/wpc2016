@@ -25,6 +25,21 @@ get '/sqs' do
   puts resp.to_h
   puts resp.queue_url
   
+  resp = client.send_message({
+  queue_url: resp.queue_url, # required
+  message_body: "String", # required
+  delay_seconds: 1,
+  message_attributes: {
+    "String" => {
+      string_value: "String",
+      binary_value: "data",
+      string_list_values: ["String"],
+      binary_list_values: ["data"],
+      data_type: "String", # required
+    },
+  },
+})
+  
   re = sqs.receive_message({
   queue_url: resp.queue_url,
   message_attribute_names: ["MessageAttributeName"],

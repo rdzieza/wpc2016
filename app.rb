@@ -68,7 +68,7 @@ def get_bucket
 end
 
 def upload(file, filename)
-  obj = get_bucket.object(filename)
+  obj = get_bucket.object(filename.downcase)
 
   if obj.upload_file(file)
     puts "Uploaded #{file} to bucket #{bucket}"

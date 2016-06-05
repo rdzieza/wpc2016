@@ -18,6 +18,10 @@ while true
     wait_time_seconds: 1,
   })
   
+  if resp.nil?
+    puts resp.to_h
+  end
+  
   msg = JSON.parse(resp.body)
   album_name = msg["album_name"]
   email = msg["email"]

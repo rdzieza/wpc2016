@@ -20,7 +20,7 @@ post '/upload' do
 end
 
 get '/list' do
-  @files = get_bucket.objects(prefix: '*.jpg').collect(&:key)
+  @files = get_bucket.objects.collect(&:key)
   haml :list
 end
 
@@ -34,11 +34,11 @@ post '/save' do
     name = params[:file_name] + ".pdf"
   end
   
-  FileUtils.mkdir_p 'files'
+  FileUtils.mkdir_p 'files' # temporary directory
   
   s3_client = Aws::S3::Client.new(region: 'eu-central-1')
   params[:files].each do |filename|
-    puts filename
+    # save every choosed files to files/ directory
     s3_client.get_object(
       bucket: '166543-robson', 
       key: filename, 
@@ -47,13 +47,14 @@ post '/save' do
 
   pdf = Prawn::Document.new
   params[:files].each do |f|
-    title = "files/" + f
+    title = "files/" + f # path to file
     pdf.image title, :at => [50, 250], :width => 300, :height => 350
     pdf.start_new_page
   end
 
-  pdf.render_file "files/" + name
+  pdf.render_file "files/" + name # save pdf to file
   
+  # send mail
   mail_subject = "Your album: #{name}"
   Pony.mail(
     :to => email, 
@@ -62,7 +63,12 @@ post '/save' do
     :body => 'Check attachments.',
     :attachments => {"#{name}" => File.read("files/" + name) })
     
-  FileUtils.remove_dir("files");
+  # delete files from bucket, remove temporary dir
+  FileUtils.remove_dir "files";
+  params[:files].each do |f|
+    obj = bucket.object(f)
+    obj.delete
+  end
 
   result
 end

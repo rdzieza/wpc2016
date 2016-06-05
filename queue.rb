@@ -17,6 +17,7 @@ while true
     visibility_timeout: 1,
     wait_time_seconds: 1,
   })
+  puts resp.to_h
   
   if resp.nil?
     puts "mail will be send from: " + resp.body

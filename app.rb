@@ -35,7 +35,6 @@ post '/save' do
     name = params[:file_name] + ".pdf"
   end
   
-  Dir.mkdir("files") unless File.exists?("files")
   s3_client = Aws::S3::Client.new
   params[:files].each do |filename|
     s3_client.get_object(

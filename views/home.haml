@@ -14,7 +14,7 @@
     %br       
     %form{ :action => "/upload", :method => "post", :multipart => "true", :enctype => "multipart/form-data"}
       %label{:for => "file"} File:
-      %input.form-control{:type => "file", "name" => "file"}
+      %input.form-control{:type => "file", "name" => "file", :accept => "image/jpeg, image/png, image/jpg"}
       %br
       %input.btn.btn-default{:type => "submit", "value" => "upload"}
 

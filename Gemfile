@@ -1,9 +1,9 @@
-source "http://rubygems.org/"
+source 'http://rubygems.org/'
 
 gem 'io-console'
-gem "sinatra"
-gem "haml"
-gem "prawn"
-gem "aws-sdk"
-gem "sendmail"
-gem "pony"
+gem 'sinatra'
+gem 'haml'
+gem 'prawn'
+gem 'aws-sdk'
+gem 'sendmail'
+gem 'pony'

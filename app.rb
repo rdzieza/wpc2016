@@ -19,7 +19,7 @@ post '/upload' do
 end
 
 get '/list' do
-  @files = get_bucket.objects.collect(&:key)
+  @files = Uploader.get_bucket.objects.collect(&:key)
   haml :list
 end
 

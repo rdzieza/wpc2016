@@ -38,5 +38,5 @@ post '/save' do
 
   Uploader.send_to_sqs(JSON.generate(album))
 
-  result
+  haml :result
 end

@@ -25,7 +25,7 @@ while true
     email = msg['email']
     files = msg['files']
     unless album_name.nil? && email.nil? && files.nil?
-      puts 'make dir, save files'
+      # puts 'make dir, save files'
       FileUtils.mkdir_p 'files' # temporary directory
       files.each do |filename|
         # save every choosed files to files/ directory

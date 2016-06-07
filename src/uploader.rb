@@ -4,11 +4,12 @@ class Uploader
 
   def self.upload_to_bucket(file, filename)
     obj = get_bucket.object(filename.downcase)
-    if obj.upload_file(file)
-      puts "Uploaded #{file}"
-    else
-      puts "Could not upload #{file}!"
-    end
+    obj.upload_file(file)
+    # if obj.upload_file(file)
+    #   puts "Uploaded #{file}"
+    # else
+    #   puts "Could not upload #{file}!"
+    # end
   end
 
   def self.send_to_sqs(json)

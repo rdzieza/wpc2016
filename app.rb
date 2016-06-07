@@ -12,7 +12,7 @@ end
 post '/upload' do
   tempfile = params[:file][:tempfile]
   filename = params[:file][:filename]
-  puts tempfile.path
+  # puts tempfile.path
   
   Uploader.upload_to_bucket(tempfile.path, filename)
   redirect '/list'

@@ -12,8 +12,11 @@ class Uploader
   end
 
   def self.send_to_sqs(json)
-    get_sqs_client.send_message({
-                         queue_url: get_sqs_queue.queue_url,
+    p client
+    p queue
+
+    client.send_message({
+                         queue_url: queue.queue_url,
                          message_body: json,
                          delay_seconds: 1
                      })
@@ -27,12 +30,12 @@ class Uploader
     Aws::S3::Resource.new(region: AWS_REGION).bucket('166543-robson')
   end
 
-  def self.get_sqs_client
+  def self.client
     Aws::SQS::Client.new(region: AWS_REGION)
   end
 
-  def self.get_sqs_queue
-    get_sqs_client.create_queue({queue_name: 'tsowa-queue_name'})
+  def self.queue
+    client.create_queue({queue_name: 'tsowa-queue_name'})
   end
 
 end

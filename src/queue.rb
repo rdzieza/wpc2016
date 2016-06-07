@@ -36,7 +36,7 @@ while true
       end
 
       pdf = Prawn::Document.new
-      pdf.text name, :align => :center
+      pdf.text album_name, :align => :center
 
       files.each do |f|
         title = "files/" + f # path to file

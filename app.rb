@@ -3,6 +3,7 @@ require 'haml'
 require 'prawn'
 require 'aws-sdk'
 require 'json'
+require './src/uploader'
 
 get '/' do
   haml :home
